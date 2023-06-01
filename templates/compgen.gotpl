@@ -1,0 +1,62 @@
+{{- $gqlgen := .GQLGenData }}
+{{- $plugin := .Plugin }}
+var ComplexityFuncs ComplexityRoot = struct {
+	{{- if not $gqlgen.Config.OmitComplexity }}
+	{{ range $object := $gqlgen.Objects }}
+		{{ if not $object.IsReserved -}}
+			{{ ucFirst $object.Name }} struct {
+			{{ range $_, $fields := $object.UniqueFields }}
+				{{- $field := index $fields 0 -}}
+				{{ if not $field.IsReserved -}}
+					{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
+				{{ end }}
+			{{- end }}
+			}
+		{{- end }}
+	{{ end }}
+	{{- end }}
+} {
+	{{- if not $gqlgen.Config.OmitComplexity }}
+	{{ range $object := $gqlgen.Objects }}
+		{{ if not $object.IsReserved -}}
+			{{ ucFirst $object.Name }}: struct {
+			{{ range $_, $fields := $object.UniqueFields }}
+				{{- $field := index $fields 0 -}}
+				{{ if not $field.IsReserved -}}
+					{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
+				{{ end }}
+			{{- end }}
+			} {
+			{{ range $_, $fields := $object.UniqueFields }}
+				{{- $field := index $fields 0 -}}
+				{{ if not $field.IsReserved -}}
+					{{ $field.GoFieldName }}: {{ $field.ComplexitySignature }} {
+						var complexity int
+					{{- $directive := $field.FieldDefinition.Directives.ForName "complexity" }}
+					{{ if $directive }}
+						complexity = childComplexity + {{ ($directive.Arguments.ForName "x").Value.Raw }} 
+					{{ else }}
+						complexity = childComplexity + {{ $plugin.DefaultComplexity }}
+					{{ end }}
+
+					{{- $first := $field.Arguments.ForName "first" }}
+					{{- $last := $field.Arguments.ForName "last" }}
+					{{- if $first }}
+						if first != nil {
+							complexity *= *first
+						}
+					{{ end }}
+					{{ if $last }}
+						if last != nil {
+							complexity *= *last
+						}
+					{{ end }}
+						return complexity
+					},
+				{{ end }}
+			{{- end }}
+			},
+		{{- end }}
+	{{ end }}
+	{{- end }}
+}
