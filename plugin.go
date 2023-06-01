@@ -21,19 +21,29 @@ var (
 )
 
 type Plugin struct {
+	Filename          string
 	DefaultComplexity int
 }
 
 type Option func(*Plugin)
 
+// WithDefaultComplexity sets default complexity. default is `1`.
 func WithDefaultComplexity(x int) Option {
 	return func(p *Plugin) {
 		p.DefaultComplexity = x
 	}
 }
 
+// WithFilename sets generated filename. default is `compgen.go`.
+func WithFilename(fn string) Option {
+	return func(p *Plugin) {
+		p.Filename = fn
+	}
+}
+
 func New(opts ...Option) *Plugin {
 	p := Plugin{
+		Filename:          "compgen.go",
 		DefaultComplexity: 1,
 	}
 
@@ -59,7 +69,7 @@ func (p *Plugin) GenerateCode(cfg *codegen.Data) error {
 	return templates.Render(templates.Options{
 		PackageName:     cfg.Config.Exec.Package,
 		Template:        tmpl,
-		Filename:        filepath.Join(filepath.Dir(cfg.Config.Exec.Filename), "compgen.go"),
+		Filename:        filepath.Join(filepath.Dir(cfg.Config.Exec.Filename), p.Filename),
 		GeneratedHeader: true,
 		Packages:        cfg.Config.Packages,
 		Data: Inputs{
@@ -74,5 +84,5 @@ func (*Plugin) MutateConfig(cfg *config.Config) error {
 	cfg.Directives["complexity"] = config.DirectiveConfig{
 		SkipRuntime: true,
 	}
-  return nil
+	return nil
 }
