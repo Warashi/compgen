@@ -34,18 +34,18 @@ func TestComplexityDefault0(t *testing.T) {
 		query      string
 		complexity int
 	}{
-		{query: `query { foo(a: 5) { pageInfo { hasNextPage } } }`, complexity: 10},
-		{query: `query { foo(a: 10) { pageInfo { hasNextPage } } }`, complexity: 20},
-		{query: `query { foo(a: 5) { edges { node { bar } }  } }`, complexity: 25},
-		{query: `query { foo(a: 10) { edges { node { bar } } } }`, complexity: 50},
+		{query: `query { foo(a: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 10},
+		{query: `query { foo(a: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 20},
+		{query: `query { foo(a: 5, b: 1) { edges { node { bar } }  } }`, complexity: 25},
+		{query: `query { foo(a: 10, b: 1) { edges { node { bar } } } }`, complexity: 50},
 		{query: `query { foo(b: 5) { pageInfo { hasNextPage } } }`, complexity: 10},
 		{query: `query { foo(b: 10) { pageInfo { hasNextPage } } }`, complexity: 20},
 		{query: `query { foo(b: 5) { edges { node { bar } }  } }`, complexity: 25},
 		{query: `query { foo(b: 10) { edges { node { bar } } } }`, complexity: 50},
-		{query: `query { foo(c: 5) { pageInfo { hasNextPage } } }`, complexity: 2},
-		{query: `query { foo(c: 10) { pageInfo { hasNextPage } } }`, complexity: 2},
-		{query: `query { foo(c: 5) { edges { node { bar } }  } }`, complexity: 5},
-		{query: `query { foo(c: 10) { edges { node { bar } } } }`, complexity: 5},
+		{query: `query { foo(c: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 2},
+		{query: `query { foo(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 2},
+		{query: `query { foo(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 5},
+		{query: `query { foo(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 5},
 	}
 
 	for i, tt := range tests {
@@ -76,18 +76,18 @@ func TestComplexityDefault1(t *testing.T) {
 		query      string
 		complexity int
 	}{
-		{query: `query { foo(a: 5) { pageInfo { hasNextPage } } }`, complexity: 20},
-		{query: `query { foo(a: 10) { pageInfo { hasNextPage } } }`, complexity: 40},
-		{query: `query { foo(a: 5) { edges { node { bar } }  } }`, complexity: 35},
-		{query: `query { foo(a: 10) { edges { node { bar } } } }`, complexity: 70},
+		{query: `query { foo(a: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 20},
+		{query: `query { foo(a: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 40},
+		{query: `query { foo(a: 5, b: 1) { edges { node { bar } }  } }`, complexity: 35},
+		{query: `query { foo(a: 10, b: 1) { edges { node { bar } } } }`, complexity: 70},
 		{query: `query { foo(b: 5) { pageInfo { hasNextPage } } }`, complexity: 20},
 		{query: `query { foo(b: 10) { pageInfo { hasNextPage } } }`, complexity: 40},
 		{query: `query { foo(b: 5) { edges { node { bar } }  } }`, complexity: 35},
 		{query: `query { foo(b: 10) { edges { node { bar } } } }`, complexity: 70},
-		{query: `query { foo(c: 5) { pageInfo { hasNextPage } } }`, complexity: 4},
-		{query: `query { foo(c: 10) { pageInfo { hasNextPage } } }`, complexity: 4},
-		{query: `query { foo(c: 5) { edges { node { bar } }  } }`, complexity: 7},
-		{query: `query { foo(c: 10) { edges { node { bar } } } }`, complexity: 7},
+		{query: `query { foo(c: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 4},
+		{query: `query { foo(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 4},
+		{query: `query { foo(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 7},
+		{query: `query { foo(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 7},
 	}
 
 	for i, tt := range tests {
@@ -118,18 +118,18 @@ func TestComplexityDefault2(t *testing.T) {
 		query      string
 		complexity int
 	}{
-		{query: `query { foo(a: 5) { pageInfo { hasNextPage } } }`, complexity: 30},
-		{query: `query { foo(a: 10) { pageInfo { hasNextPage } } }`, complexity: 60},
-		{query: `query { foo(a: 5) { edges { node { bar } }  } }`, complexity: 45},
-		{query: `query { foo(a: 10) { edges { node { bar } } } }`, complexity: 90},
+		{query: `query { foo(a: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 30},
+		{query: `query { foo(a: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 60},
+		{query: `query { foo(a: 5, b: 1) { edges { node { bar } }  } }`, complexity: 45},
+		{query: `query { foo(a: 10, b: 1) { edges { node { bar } } } }`, complexity: 90},
 		{query: `query { foo(b: 5) { pageInfo { hasNextPage } } }`, complexity: 30},
 		{query: `query { foo(b: 10) { pageInfo { hasNextPage } } }`, complexity: 60},
 		{query: `query { foo(b: 5) { edges { node { bar } }  } }`, complexity: 45},
 		{query: `query { foo(b: 10) { edges { node { bar } } } }`, complexity: 90},
-		{query: `query { foo(c: 5) { pageInfo { hasNextPage } } }`, complexity: 6},
-		{query: `query { foo(c: 10) { pageInfo { hasNextPage } } }`, complexity: 6},
-		{query: `query { foo(c: 5) { edges { node { bar } }  } }`, complexity: 9},
-		{query: `query { foo(c: 10) { edges { node { bar } } } }`, complexity: 9},
+		{query: `query { foo(c: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 6},
+		{query: `query { foo(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 6},
+		{query: `query { foo(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 9},
+		{query: `query { foo(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 9},
 	}
 
 	for i, tt := range tests {

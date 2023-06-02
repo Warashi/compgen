@@ -65,12 +65,12 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Foo func(childComplexity int, a *int, b *int, c *int) int
+		Foo func(childComplexity int, a *int, b int, c *int) int
 	}
 }
 
 type QueryResolver interface {
-	Foo(ctx context.Context, a *int, b *int, c *int) (*model.FooConnection, error)
+	Foo(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
 }
 
 type executableSchema struct {
@@ -161,7 +161,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Foo(childComplexity, args["a"].(*int), args["b"].(*int), args["c"].(*int)), true
+		return e.complexity.Query.Foo(childComplexity, args["a"].(*int), args["b"].(int), args["c"].(*int)), true
 
 	}
 	return 0, false
@@ -220,7 +220,7 @@ var sources = []*ast.Source{
 type Query {
     foo(
       a: Int,
-      b: Int,
+      b: Int!,
       c: Int,
     ): FooConnection! @complexity(x: 2, mul: ["a","b"])
 }
@@ -280,10 +280,10 @@ func (ec *executionContext) field_Query_foo_args(ctx context.Context, rawArgs ma
 		}
 	}
 	args["a"] = arg0
-	var arg1 *int
+	var arg1 int
 	if tmp, ok := rawArgs["b"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("b"))
-		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		arg1, err = ec.unmarshalNInt2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -763,7 +763,7 @@ func (ec *executionContext) _Query_foo(ctx context.Context, field graphql.Collec
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Foo(rctx, fc.Args["a"].(*int), fc.Args["b"].(*int), fc.Args["c"].(*int))
+		return ec.resolvers.Query().Foo(rctx, fc.Args["a"].(*int), fc.Args["b"].(int), fc.Args["c"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3335,6 +3335,21 @@ func (ec *executionContext) marshalNFooEdge2ᚖgithubᚗcomᚋWarashiᚋcompgen�
 		return graphql.Null
 	}
 	return ec._FooEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
 }
 
 func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋcalculationᚋgql1ᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {

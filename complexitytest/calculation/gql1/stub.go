@@ -10,7 +10,7 @@ import (
 
 type Stub struct {
 	QueryResolver struct {
-		Foo func(ctx context.Context, a *int, b *int, c *int) (*model.FooConnection, error)
+		Foo func(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
 	}
 }
 
@@ -20,6 +20,6 @@ func (r *Stub) Query() QueryResolver {
 
 type stubQuery struct{ *Stub }
 
-func (r *stubQuery) Foo(ctx context.Context, a *int, b *int, c *int) (*model.FooConnection, error) {
+func (r *stubQuery) Foo(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error) {
 	return r.QueryResolver.Foo(ctx, a, b, c)
 }

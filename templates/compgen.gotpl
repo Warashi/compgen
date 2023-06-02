@@ -43,9 +43,17 @@ var ComplexityFuncs ComplexityRoot = struct {
 						{{- $mul := $directive.Arguments.ForName "mul" }}
 						{{ if $mul }}
 							{{ range $_, $f := $mul.Value.Children }}
-							if {{ $f.Value.Raw }} != nil {
-								 complexity *= *{{ $f.Value.Raw }}
-							}
+								{{- $name := $f.Value.Raw }}
+								{{- $arg := $field.Arguments.ForName $name }}
+								{{ if $arg }}
+									{{ if $arg.Type.NonNull }}
+										 complexity *= {{ $arg.Name }}
+									{{ else }}
+										if {{ $arg.Name }} != nil {
+											 complexity *= *{{ $arg.Name }}
+										}
+									{{ end }}
+								{{ end }}
 							{{ end }}
 						{{ end }}
 					{{ end }}

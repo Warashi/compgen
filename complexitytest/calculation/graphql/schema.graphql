@@ -3,7 +3,7 @@ directive @complexity(x: Int, mul: [String!]) on INPUT_FIELD_DEFINITION | FIELD_
 type Query {
     foo(
       a: Int,
-      b: Int,
+      b: Int!,
       c: Int,
     ): FooConnection! @complexity(x: 2, mul: ["a","b"])
 }
