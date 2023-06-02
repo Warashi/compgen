@@ -1,47 +1,40 @@
 # Compgen
-Compgen is a gqlgen plugin.
-Compgen generates ComplexityRoot of gqlgen.
-Generated ComplexityRoot calculates complexity with directive `@complexity(x: number)` and relay paging specification, and configuarable default fallback.
+Compgen is a gqlgen plugin designed to simplify the generation of ComplexityRoot for gqlgen. The generated ComplexityRoot calculates complexity using the @complexity(x: number) directive, the Relay pagination specification, and a configurable default fallback.
 
 ## Usage
-First, write main.go as gqlgen to use this plugin. For example:
+1. Create a main.go file to use this plugin with gqlgen. Here's an example:
 ```go
 package main
 
 import (
-	"fmt"
-	"os"
-
-	"github.com/99designs/gqlgen/api"
-	"github.com/99designs/gqlgen/codegen/config"
-	"github.com/Warashi/compgen"
+    "fmt"
+    "os"
+    "github.com/99designs/gqlgen/api"
+    "github.com/99designs/gqlgen/codegen/config"
+    "github.com/Warashi/compgen"
 )
 
 func main() {
-	cfg, err := config.LoadConfigFromDefaultLocations()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "failed to load config", err.Error())
-		os.Exit(2)
-	}
-
-	if err := api.Generate(cfg, api.AddPlugin(compgen.New(compgen.WithDefaultComplexity(1)))); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-		os.Exit(3)
-	}
+    cfg, err := config.LoadConfigFromDefaultLocations()
+    if err != nil {
+        fmt.Fprintln(os.Stderr, "failed to load config", err.Error())
+        os.Exit(2)
+    }
+    if err := api.Generate(cfg, api.AddPlugin(compgen.New(compgen.WithDefaultComplexity(1)))); err != nil {
+        fmt.Fprintln(os.Stderr, err.Error())
+        os.Exit(3)
+    }
 }
 ```
-
-Then, use generated ComplexityFunc as ComplexityRoot. For example:
+2. Use the generated ComplexityFunc as ComplexityRoot. For example:
 ```go
 cfg := gql.Config{
-  Resolvers: resolvers, 
+  Resolvers: resolvers,
   Complexity: gql.ComplexityFuncs,
 }
-
 srv := handler.NewDefaultServer(gql.NewExecutableSchema(cfg))
 srv.Use(extension.FixedComplexityLimit(1000))
 ```
-
 ## Calculation Example
 ### Schema
 ```graphql
@@ -75,8 +68,7 @@ type Foo {
   bar: String! @complexity(x: 3)
 }
 ```
-
-execute below query 
+Execute the following query:
 ```graphql
 query {
   foo(first: 5) {
@@ -84,9 +76,8 @@ query {
       node {
         bar
       }
-    } 
+    }
   }
 }
 ```
-
-complexity becomes `(3 + default + default + 2) * 5`
+The complexity will be calculated as (3 + default + default + 2) * 5.
