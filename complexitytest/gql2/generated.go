@@ -65,12 +65,12 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Foo func(childComplexity int, after *string, first *int, before *string, last *int) int
+		Foo func(childComplexity int, a *int, b *int, c *int) int
 	}
 }
 
 type QueryResolver interface {
-	Foo(ctx context.Context, after *string, first *int, before *string, last *int) (*model.FooConnection, error)
+	Foo(ctx context.Context, a *int, b *int, c *int) (*model.FooConnection, error)
 }
 
 type executableSchema struct {
@@ -161,7 +161,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Foo(childComplexity, args["after"].(*string), args["first"].(*int), args["before"].(*string), args["last"].(*int)), true
+		return e.complexity.Query.Foo(childComplexity, args["a"].(*int), args["b"].(*int), args["c"].(*int)), true
 
 	}
 	return 0, false
@@ -215,15 +215,14 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../graphql/schema.graphql", Input: `directive @complexity(x: Int) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+	{Name: "../graphql/schema.graphql", Input: `directive @complexity(x: Int, mul: [String!]) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
 type Query {
     foo(
-      after: String,
-      first: Int,
-      before: String,
-      last: Int,
-    ): FooConnection! @complexity(x: 2)
+      a: Int,
+      b: Int,
+      c: Int,
+    ): FooConnection! @complexity(x: 2, mul: ["a","b"])
 }
 
 type PageInfo {
@@ -272,42 +271,33 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 func (ec *executionContext) field_Query_foo_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *string
-	if tmp, ok := rawArgs["after"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg0 *int
+	if tmp, ok := rawArgs["a"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("a"))
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["after"] = arg0
+	args["a"] = arg0
 	var arg1 *int
-	if tmp, ok := rawArgs["first"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+	if tmp, ok := rawArgs["b"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("b"))
 		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["first"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["before"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	args["b"] = arg1
+	var arg2 *int
+	if tmp, ok := rawArgs["c"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("c"))
+		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["before"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["last"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last"] = arg3
+	args["c"] = arg2
 	return args, nil
 }
 
@@ -773,7 +763,7 @@ func (ec *executionContext) _Query_foo(ctx context.Context, field graphql.Collec
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Foo(rctx, fc.Args["after"].(*string), fc.Args["first"].(*int), fc.Args["before"].(*string), fc.Args["last"].(*int))
+		return ec.resolvers.Query().Foo(rctx, fc.Args["a"].(*int), fc.Args["b"].(*int), fc.Args["c"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3665,6 +3655,44 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	}
 	res := graphql.MarshalInt(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

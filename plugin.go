@@ -2,11 +2,11 @@ package compgen
 
 import (
 	_ "embed"
+	"fmt"
 	"path/filepath"
 
 	"github.com/99designs/gqlgen/codegen"
 	"github.com/99designs/gqlgen/codegen/config"
-	_ "github.com/99designs/gqlgen/codegen/config"
 	"github.com/99designs/gqlgen/codegen/templates"
 	"github.com/99designs/gqlgen/plugin"
 )
@@ -66,6 +66,30 @@ type Inputs struct {
 
 // GenerateCode implements plugin.CodeGenerator
 func (p *Plugin) GenerateCode(cfg *codegen.Data) error {
+	for _, object := range cfg.Objects {
+		for _, fields := range object.UniqueFields() {
+			field := fields[0]
+			directive := field.FieldDefinition.Directives.ForName("complexity")
+			if directive == nil {
+				continue
+			}
+			mul := directive.Arguments.ForName("mul")
+			if mul == nil {
+				continue
+			}
+
+			for _, child := range mul.Value.Children {
+				name := child.Value.Raw
+        arg := field.Arguments.ForName(name)
+        if arg == nil {
+          continue
+        }
+        if arg.Type.NamedType != "Int" {
+          return fmt.Errorf("argument `%s` is used by @complexity.mul, but type is not Int", arg.Name)
+        }
+			}
+		}
+	}
 	return templates.Render(templates.Options{
 		PackageName:     cfg.Config.Exec.Package,
 		Template:        tmpl,

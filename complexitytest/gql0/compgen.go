@@ -25,7 +25,7 @@ var ComplexityFuncs ComplexityRoot = struct {
 	}
 
 	Query struct {
-		Foo func(childComplexity int, after *string, first *int, before *string, last *int) int
+		Foo func(childComplexity int, a *int, b *int, c *int) int
 	}
 }{
 
@@ -118,19 +118,19 @@ var ComplexityFuncs ComplexityRoot = struct {
 	},
 
 	Query: struct {
-		Foo func(childComplexity int, after *string, first *int, before *string, last *int) int
+		Foo func(childComplexity int, a *int, b *int, c *int) int
 	}{
-		Foo: func(childComplexity int, after *string, first *int, before *string, last *int) int {
+		Foo: func(childComplexity int, a *int, b *int, c *int) int {
 			var complexity int
 
 			complexity = childComplexity + 2
 
-			if first != nil {
-				complexity *= *first
+			if a != nil {
+				complexity *= *a
 			}
 
-			if last != nil {
-				complexity *= *last
+			if b != nil {
+				complexity *= *b
 			}
 
 			return complexity
