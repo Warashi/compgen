@@ -1,6 +1,6 @@
-//go:generate go run ./cmd/gqlgen.go -config gqlgen-default0.yaml -stub gql0/stub.go -complexity 0
-//go:generate go run ./cmd/gqlgen.go -config gqlgen-default1.yaml -stub gql1/stub.go -complexity 1
-//go:generate go run ./cmd/gqlgen.go -config gqlgen-default2.yaml -stub gql2/stub.go -complexity 2
+//go:generate go run ../cmd/gqlgen.go -config gqlgen-default0.yaml -stub gql0/stub.go -complexity 0
+//go:generate go run ../cmd/gqlgen.go -config gqlgen-default1.yaml -stub gql1/stub.go -complexity 1
+//go:generate go run ../cmd/gqlgen.go -config gqlgen-default2.yaml -stub gql2/stub.go -complexity 2
 package complexity_test
 
 import (
