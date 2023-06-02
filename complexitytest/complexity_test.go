@@ -20,8 +20,10 @@ import (
 func TestComplexityDefault0(t *testing.T) {
 	resolvers := &gql0.Stub{}
 
-	cfg := gql0.Config{Resolvers: resolvers}
-	cfg.Complexity = gql0.ComplexityFuncs
+	cfg := gql0.Config{
+		Resolvers:  resolvers,
+		Complexity: gql0.ComplexityFuncs,
+	}
 
 	srv := handler.NewDefaultServer(gql0.NewExecutableSchema(cfg))
 	srv.Use(extension.FixedComplexityLimit(0))
@@ -52,8 +54,10 @@ func TestComplexityDefault0(t *testing.T) {
 func TestComplexityDefault1(t *testing.T) {
 	resolvers := &gql1.Stub{}
 
-	cfg := gql1.Config{Resolvers: resolvers}
-	cfg.Complexity = gql1.ComplexityFuncs
+	cfg := gql1.Config{
+		Resolvers:  resolvers,
+		Complexity: gql1.ComplexityFuncs,
+	}
 
 	srv := handler.NewDefaultServer(gql1.NewExecutableSchema(cfg))
 	srv.Use(extension.FixedComplexityLimit(0))
@@ -84,8 +88,10 @@ func TestComplexityDefault1(t *testing.T) {
 func TestComplexityDefault2(t *testing.T) {
 	resolvers := &gql2.Stub{}
 
-	cfg := gql2.Config{Resolvers: resolvers}
-	cfg.Complexity = gql2.ComplexityFuncs
+	cfg := gql2.Config{
+		Resolvers:  resolvers,
+		Complexity: gql2.ComplexityFuncs,
+	}
 
 	srv := handler.NewDefaultServer(gql2.NewExecutableSchema(cfg))
 	srv.Use(extension.FixedComplexityLimit(0))
