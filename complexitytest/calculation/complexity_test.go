@@ -11,9 +11,9 @@ import (
 	"github.com/99designs/gqlgen/client"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
-	"github.com/Warashi/compgen/complexitytest/gql0"
-	"github.com/Warashi/compgen/complexitytest/gql1"
-	"github.com/Warashi/compgen/complexitytest/gql2"
+	"github.com/Warashi/compgen/complexitytest/calculation/gql0"
+	"github.com/Warashi/compgen/complexitytest/calculation/gql1"
+	"github.com/Warashi/compgen/complexitytest/calculation/gql2"
 	"github.com/stretchr/testify/assert"
 )
 
