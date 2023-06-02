@@ -15,7 +15,10 @@ import (
 //go:embed templates/compgen.gotpl
 var tmpl string
 
-var ErrMulFieldIsNotInt = errors.New("mul field is not Int")
+var (
+	ErrMulFieldIsNotInt   = errors.New("mul field is not Int")
+	ErrMulFieldIsNotExist = errors.New("mul field is not exist")
+)
 
 var (
 	_ plugin.Plugin        = (*Plugin)(nil)
@@ -85,10 +88,10 @@ func (p *Plugin) GenerateCode(cfg *codegen.Data) error {
 				name := child.Value.Raw
 				arg := field.Arguments.ForName(name)
 				if arg == nil {
-					continue
+					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its not exist: %w", name, ErrMulFieldIsNotExist)
 				}
 				if arg.Type.NamedType != "Int" {
-					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its type is not Int: %w", arg.Name, ErrMulFieldIsNotInt)
+					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its type is not Int: %w", name, ErrMulFieldIsNotInt)
 				}
 			}
 		}
