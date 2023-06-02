@@ -13,7 +13,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/Warashi/compgen/complexitytest/mul-field-error/gql/model"
+	"github.com/Warashi/compgen/complexitytest/mul-field-type-error/gql/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -401,7 +401,7 @@ func (ec *executionContext) _FooConnection_edges(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.FooEdge)
 	fc.Result = res
-	return ec.marshalNFooEdge2ᚕᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐFooEdgeᚄ(ctx, field.Selections, res)
+	return ec.marshalNFooEdge2ᚕᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐFooEdgeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_FooConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -451,7 +451,7 @@ func (ec *executionContext) _FooConnection_pageInfo(ctx context.Context, field g
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_FooConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -549,7 +549,7 @@ func (ec *executionContext) _FooEdge_node(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(*model.Foo)
 	fc.Result = res
-	return ec.marshalNFoo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐFoo(ctx, field.Selections, res)
+	return ec.marshalNFoo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐFoo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_FooEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -767,7 +767,7 @@ func (ec *executionContext) _Query_foo(ctx context.Context, field graphql.Collec
 	}
 	res := resTmp.(*model.FooConnection)
 	fc.Result = res
-	return ec.marshalNFooConnection2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐFooConnection(ctx, field.Selections, res)
+	return ec.marshalNFooConnection2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐFooConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_foo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3249,7 +3249,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNFoo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐFoo(ctx context.Context, sel ast.SelectionSet, v *model.Foo) graphql.Marshaler {
+func (ec *executionContext) marshalNFoo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐFoo(ctx context.Context, sel ast.SelectionSet, v *model.Foo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -3259,11 +3259,11 @@ func (ec *executionContext) marshalNFoo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋco
 	return ec._Foo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFooConnection2githubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐFooConnection(ctx context.Context, sel ast.SelectionSet, v model.FooConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNFooConnection2githubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐFooConnection(ctx context.Context, sel ast.SelectionSet, v model.FooConnection) graphql.Marshaler {
 	return ec._FooConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNFooConnection2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐFooConnection(ctx context.Context, sel ast.SelectionSet, v *model.FooConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNFooConnection2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐFooConnection(ctx context.Context, sel ast.SelectionSet, v *model.FooConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -3273,7 +3273,7 @@ func (ec *executionContext) marshalNFooConnection2ᚖgithubᚗcomᚋWarashiᚋco
 	return ec._FooConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFooEdge2ᚕᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐFooEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.FooEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNFooEdge2ᚕᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐFooEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.FooEdge) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3297,7 +3297,7 @@ func (ec *executionContext) marshalNFooEdge2ᚕᚖgithubᚗcomᚋWarashiᚋcompg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNFooEdge2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐFooEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalNFooEdge2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐFooEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3317,7 +3317,7 @@ func (ec *executionContext) marshalNFooEdge2ᚕᚖgithubᚗcomᚋWarashiᚋcompg
 	return ret
 }
 
-func (ec *executionContext) marshalNFooEdge2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐFooEdge(ctx context.Context, sel ast.SelectionSet, v *model.FooEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNFooEdge2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐFooEdge(ctx context.Context, sel ast.SelectionSet, v *model.FooEdge) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -3327,7 +3327,7 @@ func (ec *executionContext) marshalNFooEdge2ᚖgithubᚗcomᚋWarashiᚋcompgen�
 	return ec._FooEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑerrorᚋgqlᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
+func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋmulᚑfieldᚑtypeᚑerrorᚋgqlᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
