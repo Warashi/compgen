@@ -2,6 +2,7 @@ package compgen
 
 import (
 	_ "embed"
+	"errors"
 	"fmt"
 	"path/filepath"
 
@@ -13,6 +14,8 @@ import (
 
 //go:embed templates/compgen.gotpl
 var tmpl string
+
+var ErrMulFieldIsNotInt = errors.New("mul field is not Int")
 
 var (
 	_ plugin.Plugin        = (*Plugin)(nil)
@@ -80,13 +83,13 @@ func (p *Plugin) GenerateCode(cfg *codegen.Data) error {
 
 			for _, child := range mul.Value.Children {
 				name := child.Value.Raw
-        arg := field.Arguments.ForName(name)
-        if arg == nil {
-          continue
-        }
-        if arg.Type.NamedType != "Int" {
-          return fmt.Errorf("argument `%s` is used by @complexity.mul, but type is not Int", arg.Name)
-        }
+				arg := field.Arguments.ForName(name)
+				if arg == nil {
+					continue
+				}
+				if arg.Type.NamedType != "Int" {
+					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its type is not Int: %w", arg.Name, ErrMulFieldIsNotInt)
+				}
 			}
 		}
 	}
