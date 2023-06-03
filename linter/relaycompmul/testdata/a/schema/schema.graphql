@@ -51,5 +51,35 @@ type FooEdge {
 }
 
 type Foo {
-  bar: String!
+    bar: String!
+    a(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! # want "field \[a\] is Relay Cursor Connections field, but @complexity directive is not found"
+    b(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(x: 1) # want "field \[b\] is Relay Cursor Connections field, but \[first, last\] argument is not included in \[mul\] of @complexity"
+    c(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(mul: ["first"]) # want "field \[c\] is Relay Cursor Connections field, but \[last\] argument is not included in \[mul\] of @complexity"
+    d(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(mul: ["last"]) # want "field \[d\] is Relay Cursor Connections field, but \[first\] argument is not included in \[mul\] of @complexity"
+    e(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(mul: ["first","last"])
 }
