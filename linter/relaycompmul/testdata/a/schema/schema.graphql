@@ -1,12 +1,30 @@
 directive @complexity(x: Int, mul: [String!]) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
 type Query {
-    foo(
+    a(
       after: String,
       first: Int,
       before: String,
       last: Int,
     ): FooConnection!
+    b(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(mul: ["first"])
+    c(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(mul: ["last"])
+    d(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(mul: ["first","last"])
 }
 
 type PageInfo {
