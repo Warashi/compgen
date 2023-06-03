@@ -90,7 +90,7 @@ func (p *Plugin) GenerateCode(cfg *codegen.Data) error {
 				if arg == nil {
 					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its not exist: %w", name, ErrMulFieldIsNotExist)
 				}
-				if arg.Type.NamedType != "Int" {
+				if arg.Type.Name() != "Int" {
 					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its type is not Int: %w", name, ErrMulFieldIsNotInt)
 				}
 			}
