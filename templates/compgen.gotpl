@@ -26,7 +26,7 @@ var ComplexityFuncs ComplexityRoot = struct {
 			} {
 			{{ range $_, $fields := $object.UniqueFields }}
 				{{- $field := index $fields 0 -}}
-				{{ if not $field.IsReserved -}}
+				{{- if $field.IsReserved }}{{ continue }}{{ end }}
 					{{ $field.GoFieldName }}: {{ $field.ComplexitySignature }} {
 						var complexity int
 					{{- $directive := $field.FieldDefinition.Directives.ForName "complexity" }}
@@ -58,7 +58,6 @@ var ComplexityFuncs ComplexityRoot = struct {
 
 						return complexity
 					},
-				{{ end }}
 			{{- end }}
 			},
 	{{ end }}

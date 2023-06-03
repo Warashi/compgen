@@ -28,6 +28,7 @@ var ComplexityFuncs ComplexityRoot = struct {
 	Foo: struct {
 		Bar func(childComplexity int) int
 	}{
+
 		Bar: func(childComplexity int) int {
 			var complexity int
 
@@ -40,6 +41,7 @@ var ComplexityFuncs ComplexityRoot = struct {
 		Edges    func(childComplexity int) int
 		PageInfo func(childComplexity int) int
 	}{
+
 		Edges: func(childComplexity int) int {
 			var complexity int
 
@@ -59,6 +61,7 @@ var ComplexityFuncs ComplexityRoot = struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}{
+
 		Cursor: func(childComplexity int) int {
 			var complexity int
 
@@ -80,6 +83,7 @@ var ComplexityFuncs ComplexityRoot = struct {
 		HasPreviousPage func(childComplexity int) int
 		StartCursor     func(childComplexity int) int
 	}{
+
 		EndCursor: func(childComplexity int) int {
 			var complexity int
 
@@ -113,6 +117,7 @@ var ComplexityFuncs ComplexityRoot = struct {
 		Bar func(childComplexity int, a *int, b int, c *int) int
 		Foo func(childComplexity int, a *int, b int, c *int) int
 	}{
+
 		Bar: func(childComplexity int, a *int, b int, c *int) int {
 			var complexity int
 
