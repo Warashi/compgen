@@ -11,6 +11,7 @@ import (
 type Stub struct {
 	QueryResolver struct {
 		Foo func(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
+		Bar func(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
 	}
 }
 
@@ -22,4 +23,7 @@ type stubQuery struct{ *Stub }
 
 func (r *stubQuery) Foo(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error) {
 	return r.QueryResolver.Foo(ctx, a, b, c)
+}
+func (r *stubQuery) Bar(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error) {
+	return r.QueryResolver.Bar(ctx, a, b, c)
 }

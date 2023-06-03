@@ -25,6 +25,7 @@ var ComplexityFuncs ComplexityRoot = struct {
 	}
 
 	Query struct {
+		Bar func(childComplexity int, a *int, b int, c *int) int
 		Foo func(childComplexity int, a *int, b int, c *int) int
 	}
 }{
@@ -118,8 +119,22 @@ var ComplexityFuncs ComplexityRoot = struct {
 	},
 
 	Query: struct {
+		Bar func(childComplexity int, a *int, b int, c *int) int
 		Foo func(childComplexity int, a *int, b int, c *int) int
 	}{
+		Bar: func(childComplexity int, a *int, b int, c *int) int {
+			var complexity int
+
+			complexity = childComplexity + 1
+
+			if a != nil {
+				complexity *= *a
+			}
+
+			complexity *= b
+
+			return complexity
+		},
 		Foo: func(childComplexity int, a *int, b int, c *int) int {
 			var complexity int
 
