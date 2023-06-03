@@ -27,39 +27,39 @@ var ComplexityFuncs ComplexityRoot = struct {
 			{{ range $_, $fields := $object.UniqueFields }}
 				{{- $field := index $fields 0 -}}
 				{{- if $field.IsReserved }}{{ continue }}{{ end }}
-					{{ $field.GoFieldName }}: {{ $field.ComplexitySignature }} {
-						var complexity int
-					{{- $directive := $field.FieldDefinition.Directives.ForName "complexity" }}
-					{{ if and ($directive) ($directive.Arguments.ForName "x") }}
-					{{- $x := $directive.Arguments.ForName "x" }}
-						complexity = childComplexity + {{ $x.Value.Raw }} 
-					{{ else }}
-						complexity = childComplexity + {{ $plugin.DefaultComplexity }}
-					{{ end }}
+				{{ $field.GoFieldName }}: {{ $field.ComplexitySignature }} {
+					var complexity int
+				{{- $directive := $field.FieldDefinition.Directives.ForName "complexity" }}
+				{{ if and ($directive) ($directive.Arguments.ForName "x") }}
+				{{- $x := $directive.Arguments.ForName "x" }}
+					complexity = childComplexity + {{ $x.Value.Raw }} 
+				{{ else }}
+					complexity = childComplexity + {{ $plugin.DefaultComplexity }}
+				{{ end }}
 
-					{{ if $directive }}
-						{{- $mul := $directive.Arguments.ForName "mul" }}
-						{{ if $mul }}
-							{{ range $_, $f := $mul.Value.Children }}
-								{{- $name := $f.Value.Raw }}
-								{{- $arg := $field.Arguments.ForName $name }}
-								{{ if $arg }}
-									{{ if $arg.Type.NonNull }}
-										 complexity *= {{ $arg.Name }}
-									{{ else }}
-										if {{ $arg.Name }} != nil {
-											 complexity *= *{{ $arg.Name }}
-										}
-									{{ end }}
+				{{ if $directive }}
+					{{- $mul := $directive.Arguments.ForName "mul" }}
+					{{ if $mul }}
+						{{ range $_, $f := $mul.Value.Children }}
+							{{- $name := $f.Value.Raw }}
+							{{- $arg := $field.Arguments.ForName $name }}
+							{{ if $arg }}
+								{{ if $arg.Type.NonNull }}
+									 complexity *= {{ $arg.Name }}
+								{{ else }}
+									if {{ $arg.Name }} != nil {
+										 complexity *= *{{ $arg.Name }}
+									}
 								{{ end }}
 							{{ end }}
 						{{ end }}
 					{{ end }}
+				{{ end }}
 
-						return complexity
-					},
-			{{- end }}
+				return complexity
 			},
+			{{- end }}
+		},
 	{{ end }}
 	{{- end }}
 }
