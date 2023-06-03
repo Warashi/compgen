@@ -3,8 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io"
-	"log"
 	"os"
 	"time"
 
@@ -20,8 +18,6 @@ func main() {
 	cfgPath := flag.String("config", "", "path to config file (use default if omitted)")
 	defaultComplexity := flag.Int("complexity", 0, "default complexity (use 0 if omitted)")
 	flag.Parse()
-
-	log.SetOutput(io.Discard)
 
 	start := graphql.Now()
 
@@ -39,11 +35,9 @@ func main() {
 
 	var options []api.Option
 	if *stub != "" {
-		options = append(options,
-			api.AddPlugin(stubgen.New(*stub, "Stub")),
-			api.AddPlugin(compgen.New(compgen.WithDefaultComplexity(*defaultComplexity))),
-		)
+		options = append(options, api.AddPlugin(stubgen.New(*stub, "Stub")))
 	}
+	options = append(options, api.AddPlugin(compgen.New(compgen.WithDefaultComplexity(*defaultComplexity))))
 
 	err = api.Generate(cfg, options...)
 	if err != nil {

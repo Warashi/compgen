@@ -39,18 +39,25 @@ var ComplexityFuncs ComplexityRoot = struct {
 						complexity = childComplexity + {{ $plugin.DefaultComplexity }}
 					{{ end }}
 
-					{{- $first := $field.Arguments.ForName "first" }}
-					{{- $last := $field.Arguments.ForName "last" }}
-					{{- if $first }}
-						if first != nil {
-							complexity *= *first
-						}
+					{{ if $directive }}
+						{{- $mul := $directive.Arguments.ForName "mul" }}
+						{{ if $mul }}
+							{{ range $_, $f := $mul.Value.Children }}
+								{{- $name := $f.Value.Raw }}
+								{{- $arg := $field.Arguments.ForName $name }}
+								{{ if $arg }}
+									{{ if $arg.Type.NonNull }}
+										 complexity *= {{ $arg.Name }}
+									{{ else }}
+										if {{ $arg.Name }} != nil {
+											 complexity *= *{{ $arg.Name }}
+										}
+									{{ end }}
+								{{ end }}
+							{{ end }}
+						{{ end }}
 					{{ end }}
-					{{ if $last }}
-						if last != nil {
-							complexity *= *last
-						}
-					{{ end }}
+
 						return complexity
 					},
 				{{ end }}

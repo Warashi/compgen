@@ -1,12 +1,10 @@
-directive @complexity(x: Int) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+directive @complexity(x: Int, mul: [String!]) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
 type Query {
     foo(
-      after: String,
-      first: Int,
-      before: String,
-      last: Int,
-    ): FooConnection! @complexity(x: 2)
+      a: Int,
+      b: String,
+    ): FooConnection! @complexity(x: 2, mul: ["a","b"])
 }
 
 type PageInfo {

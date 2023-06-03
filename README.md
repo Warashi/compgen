@@ -1,5 +1,5 @@
 # Compgen
-Compgen is a gqlgen plugin designed to simplify the generation of ComplexityRoot for gqlgen. The generated ComplexityRoot calculates complexity using the @complexity(x: number) directive, the Relay pagination specification, and a configurable default fallback.
+Compgen is a gqlgen plugin designed to simplify the generation of ComplexityRoot for gqlgen. The generated ComplexityRoot calculates complexity using the `@complexity(x: number, mul: [String!])` directive, and a configurable default fallback.
 
 ## Usage
 1. Create a main.go file to use this plugin with gqlgen. Here's an example:
@@ -44,7 +44,7 @@ type Query {
       first: Int,
       before: String,
       last: Int,
-    ): FooConnection! @complexity(x: 2)
+    ): FooConnection! @complexity(x: 2, mul: ["first", "last"])
 }
 
 type PageInfo {
