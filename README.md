@@ -83,5 +83,5 @@ query {
 The complexity will be calculated as (3 + default + default + 2) * 5.
 
 # Additional tools
-A linter [relaycompmul](./linter/relaycompmul) is useful when compgen with [relay cursor connections spec](https://relay.dev/graphql/connections.htm).
-This linter outout errors when fields that follow relay cursor connections specificaiton and do not have `@complexity` directive or lack `mul` arguments of `@complexity`.
+A linter [relaycompmul](./linter/relaycompmul) is useful when using compgen with the [relay cursor connections specification](https://relay.dev/graphql/connections.htm).
+This linter will output errors when fields that follow the relay cursor connections specification and do not have a `@complexity` directive or are missing `mul` arguments of `@complexity`.
