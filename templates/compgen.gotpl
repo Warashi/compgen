@@ -33,8 +33,9 @@ var ComplexityFuncs ComplexityRoot = struct {
 					{{ $field.GoFieldName }}: {{ $field.ComplexitySignature }} {
 						var complexity int
 					{{- $directive := $field.FieldDefinition.Directives.ForName "complexity" }}
-					{{ if $directive }}
-						complexity = childComplexity + {{ ($directive.Arguments.ForName "x").Value.Raw }} 
+					{{ if and ($directive) ($directive.Arguments.ForName "x") }}
+					{{- $x := $directive.Arguments.ForName "x" }}
+						complexity = childComplexity + {{ $x.Value.Raw }} 
 					{{ else }}
 						complexity = childComplexity + {{ $plugin.DefaultComplexity }}
 					{{ end }}
