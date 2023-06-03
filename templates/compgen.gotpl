@@ -3,16 +3,14 @@
 var ComplexityFuncs ComplexityRoot = struct {
 	{{- if not $gqlgen.Config.OmitComplexity }}
 	{{ range $object := $gqlgen.Objects }}
-		{{ if not $object.IsReserved -}}
-			{{ ucFirst $object.Name }} struct {
-			{{ range $_, $fields := $object.UniqueFields }}
-				{{- $field := index $fields 0 -}}
-				{{ if not $field.IsReserved -}}
-					{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
-				{{ end }}
-			{{- end }}
-			}
-		{{- end }}
+		{{- if $object.IsReserved }}{{ continue }}{{ end -}}
+		{{ ucFirst $object.Name }} struct {
+		{{ range $_, $fields := $object.UniqueFields }}
+			{{- $field := index $fields 0 -}}
+			{{- if $field.IsReserved }}{{ continue }}{{ end -}}
+			{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
+		{{ end }}
+		}
 	{{ end }}
 	{{- end }}
 } {
