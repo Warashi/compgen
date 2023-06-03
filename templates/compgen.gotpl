@@ -20,9 +20,8 @@ var ComplexityFuncs ComplexityRoot = struct {
 			{{ ucFirst $object.Name }}: struct {
 			{{ range $_, $fields := $object.UniqueFields }}
 				{{- $field := index $fields 0 -}}
-				{{ if not $field.IsReserved -}}
-					{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
-				{{ end }}
+				{{- if $field.IsReserved }}{{ continue }}{{ end }}
+				{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
 			{{- end }}
 			} {
 			{{ range $_, $fields := $object.UniqueFields }}
