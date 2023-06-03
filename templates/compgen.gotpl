@@ -3,68 +3,63 @@
 var ComplexityFuncs ComplexityRoot = struct {
 	{{- if not $gqlgen.Config.OmitComplexity }}
 	{{ range $object := $gqlgen.Objects }}
-		{{ if not $object.IsReserved -}}
-			{{ ucFirst $object.Name }} struct {
-			{{ range $_, $fields := $object.UniqueFields }}
-				{{- $field := index $fields 0 -}}
-				{{ if not $field.IsReserved -}}
-					{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
-				{{ end }}
-			{{- end }}
-			}
-		{{- end }}
+		{{- if $object.IsReserved }}{{ continue }}{{ end -}}
+		{{ ucFirst $object.Name }} struct {
+		{{ range $_, $fields := $object.UniqueFields }}
+			{{- $field := index $fields 0 -}}
+			{{- if $field.IsReserved }}{{ continue }}{{ end -}}
+			{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
+		{{ end }}
+		}
 	{{ end }}
 	{{- end }}
 } {
 	{{- if not $gqlgen.Config.OmitComplexity }}
 	{{ range $object := $gqlgen.Objects }}
-		{{ if not $object.IsReserved -}}
+		{{- if $object.IsReserved }}{{ continue }}{{ end -}}
 			{{ ucFirst $object.Name }}: struct {
 			{{ range $_, $fields := $object.UniqueFields }}
 				{{- $field := index $fields 0 -}}
-				{{ if not $field.IsReserved -}}
-					{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
-				{{ end }}
+				{{- if $field.IsReserved }}{{ continue }}{{ end }}
+				{{ $field.GoFieldName }} {{ $field.ComplexitySignature }}
 			{{- end }}
 			} {
 			{{ range $_, $fields := $object.UniqueFields }}
 				{{- $field := index $fields 0 -}}
-				{{ if not $field.IsReserved -}}
-					{{ $field.GoFieldName }}: {{ $field.ComplexitySignature }} {
-						var complexity int
-					{{- $directive := $field.FieldDefinition.Directives.ForName "complexity" }}
-					{{ if and ($directive) ($directive.Arguments.ForName "x") }}
-					{{- $x := $directive.Arguments.ForName "x" }}
-						complexity = childComplexity + {{ $x.Value.Raw }} 
-					{{ else }}
-						complexity = childComplexity + {{ $plugin.DefaultComplexity }}
-					{{ end }}
+				{{- if $field.IsReserved }}{{ continue }}{{ end }}
+				{{ $field.GoFieldName }}: {{ $field.ComplexitySignature }} {
+					var complexity int
+				{{- $directive := $field.FieldDefinition.Directives.ForName "complexity" }}
+				{{ if and ($directive) ($directive.Arguments.ForName "x") }}
+				{{- $x := $directive.Arguments.ForName "x" }}
+					complexity = childComplexity + {{ $x.Value.Raw }} 
+				{{ else }}
+					complexity = childComplexity + {{ $plugin.DefaultComplexity }}
+				{{ end }}
 
-					{{ if $directive }}
-						{{- $mul := $directive.Arguments.ForName "mul" }}
-						{{ if $mul }}
-							{{ range $_, $f := $mul.Value.Children }}
-								{{- $name := $f.Value.Raw }}
-								{{- $arg := $field.Arguments.ForName $name }}
-								{{ if $arg }}
-									{{ if $arg.Type.NonNull }}
-										 complexity *= {{ $arg.Name }}
-									{{ else }}
-										if {{ $arg.Name }} != nil {
-											 complexity *= *{{ $arg.Name }}
-										}
-									{{ end }}
+				{{ if $directive }}
+					{{- $mul := $directive.Arguments.ForName "mul" }}
+					{{ if $mul }}
+						{{ range $_, $f := $mul.Value.Children }}
+							{{- $name := $f.Value.Raw }}
+							{{- $arg := $field.Arguments.ForName $name }}
+							{{ if $arg }}
+								{{ if $arg.Type.NonNull }}
+									 complexity *= {{ $arg.Name }}
+								{{ else }}
+									if {{ $arg.Name }} != nil {
+										 complexity *= *{{ $arg.Name }}
+									}
 								{{ end }}
 							{{ end }}
 						{{ end }}
 					{{ end }}
-
-						return complexity
-					},
 				{{ end }}
-			{{- end }}
+
+				return complexity
 			},
-		{{- end }}
+			{{- end }}
+		},
 	{{ end }}
 	{{- end }}
 }
