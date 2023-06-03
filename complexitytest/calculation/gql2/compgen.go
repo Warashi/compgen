@@ -25,7 +25,6 @@ var ComplexityFuncs ComplexityRoot = struct {
 		Foo func(childComplexity int, a *int, b int, c *int) int
 	}
 }{
-
 	Foo: struct {
 		Bar func(childComplexity int) int
 	}{
@@ -37,7 +36,6 @@ var ComplexityFuncs ComplexityRoot = struct {
 			return complexity
 		},
 	},
-
 	FooConnection: struct {
 		Edges    func(childComplexity int) int
 		PageInfo func(childComplexity int) int
@@ -57,7 +55,6 @@ var ComplexityFuncs ComplexityRoot = struct {
 			return complexity
 		},
 	},
-
 	FooEdge: struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
@@ -77,7 +74,6 @@ var ComplexityFuncs ComplexityRoot = struct {
 			return complexity
 		},
 	},
-
 	PageInfo: struct {
 		EndCursor       func(childComplexity int) int
 		HasNextPage     func(childComplexity int) int
@@ -113,7 +109,6 @@ var ComplexityFuncs ComplexityRoot = struct {
 			return complexity
 		},
 	},
-
 	Query: struct {
 		Bar func(childComplexity int, a *int, b int, c *int) int
 		Foo func(childComplexity int, a *int, b int, c *int) int

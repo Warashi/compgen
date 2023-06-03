@@ -16,7 +16,7 @@ var ComplexityFuncs ComplexityRoot = struct {
 } {
 	{{- if not $gqlgen.Config.OmitComplexity }}
 	{{ range $object := $gqlgen.Objects }}
-		{{ if not $object.IsReserved -}}
+		{{- if $object.IsReserved }}{{ continue }}{{ end -}}
 			{{ ucFirst $object.Name }}: struct {
 			{{ range $_, $fields := $object.UniqueFields }}
 				{{- $field := index $fields 0 -}}
@@ -62,7 +62,6 @@ var ComplexityFuncs ComplexityRoot = struct {
 				{{ end }}
 			{{- end }}
 			},
-		{{- end }}
 	{{ end }}
 	{{- end }}
 }
