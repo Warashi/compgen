@@ -61,6 +61,9 @@ func hasMul(fn string, field *ast.FieldDefinition) bool {
 }
 
 func run(pass *gqlanalysis.Pass) (interface{}, error) {
+	if pass == nil || pass.Schema == nil || pass.Schema.Query == nil {
+		return nil, nil
+	}
 	for _, field := range pass.Schema.Query.Fields {
 		if !isRelayCursorConnection(field) {
 			continue
