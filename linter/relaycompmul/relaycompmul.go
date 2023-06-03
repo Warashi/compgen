@@ -64,40 +64,42 @@ func run(pass *gqlanalysis.Pass) (interface{}, error) {
 	if pass == nil || pass.Schema == nil || pass.Schema.Query == nil {
 		return nil, nil
 	}
-	for _, field := range pass.Schema.Query.Fields {
-		if !isRelayCursorConnection(field) {
-			continue
-		}
-		if !hasComplexity(field) {
-			pass.Report(&gqlanalysis.Diagnostic{
-				Pos:     field.Type.Position,
-				Message: fmt.Sprintf("field [%s] is Relay Cursor Connections field, but @complexity directive is not found", field.Name),
-			})
-			continue
-		}
+	for _, typ := range pass.Schema.Types {
+		for _, field := range typ.Fields {
+			if !isRelayCursorConnection(field) {
+				continue
+			}
+			if !hasComplexity(field) {
+				pass.Report(&gqlanalysis.Diagnostic{
+					Pos:     field.Type.Position,
+					Message: fmt.Sprintf("field [%s] is Relay Cursor Connections field, but @complexity directive is not found", field.Name),
+				})
+				continue
+			}
 
-		first := hasMul("first", field)
-		last := hasMul("last", field)
+			first := hasMul("first", field)
+			last := hasMul("last", field)
 
-		const message = "field [%s] is Relay Cursor Connections field, but [%s] argument is not included in [mul] of @complexity"
-		switch {
-		case !first && !last:
-			pass.Report(&gqlanalysis.Diagnostic{
-				Pos:     field.Type.Position,
-				Message: fmt.Sprintf(message, field.Name, "first, last"),
-			})
-		case !first:
-			pass.Report(&gqlanalysis.Diagnostic{
-				Pos:     field.Type.Position,
-				Message: fmt.Sprintf(message, field.Name, "first"),
-			})
-		case !last:
-			pass.Report(&gqlanalysis.Diagnostic{
-				Pos:     field.Type.Position,
-				Message: fmt.Sprintf(message, field.Name, "last"),
-			})
-		default:
-			// no diagnostic
+			const message = "field [%s] is Relay Cursor Connections field, but [%s] argument is not included in [mul] of @complexity"
+			switch {
+			case !first && !last:
+				pass.Report(&gqlanalysis.Diagnostic{
+					Pos:     field.Type.Position,
+					Message: fmt.Sprintf(message, field.Name, "first, last"),
+				})
+			case !first:
+				pass.Report(&gqlanalysis.Diagnostic{
+					Pos:     field.Type.Position,
+					Message: fmt.Sprintf(message, field.Name, "first"),
+				})
+			case !last:
+				pass.Report(&gqlanalysis.Diagnostic{
+					Pos:     field.Type.Position,
+					Message: fmt.Sprintf(message, field.Name, "last"),
+				})
+			default:
+				// no diagnostic
+			}
 		}
 	}
 	return nil, nil
