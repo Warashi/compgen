@@ -1,0 +1,55 @@
+directive @complexity(x: Int, mul: [String!]) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+
+type Query {
+    a(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! # want "field \[a\] is Relay Cursor Connections field, but @complexity directive is not found"
+    b(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(x: 1) # want "field \[b\] is Relay Cursor Connections field, but \[first, last\] argument is not included in \[mul\] of @complexity"
+    c(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(mul: ["first"]) # want "field \[c\] is Relay Cursor Connections field, but \[last\] argument is not included in \[mul\] of @complexity"
+    d(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(mul: ["last"]) # want "field \[d\] is Relay Cursor Connections field, but \[first\] argument is not included in \[mul\] of @complexity"
+    e(
+      after: String,
+      first: Int,
+      before: String,
+      last: Int,
+    ): FooConnection! @complexity(mul: ["first","last"])
+}
+
+type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+}
+
+type FooConnection {
+    edges: [FooEdge!]!
+    pageInfo: PageInfo!
+}
+
+type FooEdge {
+    cursor: String!
+    node: Foo!
+}
+
+type Foo {
+  bar: String!
+}
