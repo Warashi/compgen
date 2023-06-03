@@ -6,6 +6,11 @@ type Query {
       b: Int!,
       c: Int,
     ): FooConnection! @complexity(x: 2, mul: ["a","b"])
+    bar(
+      a: Int,
+      b: Int!,
+      c: Int,
+    ): FooConnection! @complexity(mul: ["a","b"])
 }
 
 type PageInfo {

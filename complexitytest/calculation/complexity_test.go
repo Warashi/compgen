@@ -26,7 +26,7 @@ func TestComplexityDefault0(t *testing.T) {
 	}
 
 	srv := handler.NewDefaultServer(gql0.NewExecutableSchema(cfg))
-	srv.Use(extension.FixedComplexityLimit(0))
+	srv.Use(extension.FixedComplexityLimit(-1))
 
 	c := client.New(srv)
 
@@ -46,6 +46,18 @@ func TestComplexityDefault0(t *testing.T) {
 		{query: `query { foo(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 2},
 		{query: `query { foo(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 5},
 		{query: `query { foo(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 5},
+		{query: `query { bar(a: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { bar(a: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { bar(a: 5, b: 1) { edges { node { bar } }  } }`, complexity: 15},
+		{query: `query { bar(a: 10, b: 1) { edges { node { bar } } } }`, complexity: 30},
+		{query: `query { bar(b: 5) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { bar(b: 10) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { bar(b: 5) { edges { node { bar } }  } }`, complexity: 15},
+		{query: `query { bar(b: 10) { edges { node { bar } } } }`, complexity: 30},
+		{query: `query { bar(c: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { bar(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { bar(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 3},
+		{query: `query { bar(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 3},
 	}
 
 	for i, tt := range tests {
@@ -54,7 +66,7 @@ func TestComplexityDefault0(t *testing.T) {
 			t.Parallel()
 
 			err := c.Post(tt.query, new(struct{}))
-			assert.EqualError(t, err, fmt.Sprintf(`[{"message":"operation has complexity %d, which exceeds the limit of 0","extensions":{"code":"COMPLEXITY_LIMIT_EXCEEDED"}}]`, tt.complexity))
+			assert.EqualError(t, err, fmt.Sprintf(`[{"message":"operation has complexity %d, which exceeds the limit of -1","extensions":{"code":"COMPLEXITY_LIMIT_EXCEEDED"}}]`, tt.complexity))
 		})
 	}
 }
@@ -68,7 +80,7 @@ func TestComplexityDefault1(t *testing.T) {
 	}
 
 	srv := handler.NewDefaultServer(gql1.NewExecutableSchema(cfg))
-	srv.Use(extension.FixedComplexityLimit(0))
+	srv.Use(extension.FixedComplexityLimit(-1))
 
 	c := client.New(srv)
 
@@ -88,6 +100,18 @@ func TestComplexityDefault1(t *testing.T) {
 		{query: `query { foo(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 4},
 		{query: `query { foo(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 7},
 		{query: `query { foo(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 7},
+		{query: `query { bar(a: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 15},
+		{query: `query { bar(a: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 30},
+		{query: `query { bar(a: 5, b: 1) { edges { node { bar } }  } }`, complexity: 30},
+		{query: `query { bar(a: 10, b: 1) { edges { node { bar } } } }`, complexity: 60},
+		{query: `query { bar(b: 5) { pageInfo { hasNextPage } } }`, complexity: 15},
+		{query: `query { bar(b: 10) { pageInfo { hasNextPage } } }`, complexity: 30},
+		{query: `query { bar(b: 5) { edges { node { bar } }  } }`, complexity: 30},
+		{query: `query { bar(b: 10) { edges { node { bar } } } }`, complexity: 60},
+		{query: `query { bar(c: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 3},
+		{query: `query { bar(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 3},
+		{query: `query { bar(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 6},
+		{query: `query { bar(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 6},
 	}
 
 	for i, tt := range tests {
@@ -96,7 +120,7 @@ func TestComplexityDefault1(t *testing.T) {
 			t.Parallel()
 
 			err := c.Post(tt.query, new(struct{}))
-			assert.EqualError(t, err, fmt.Sprintf(`[{"message":"operation has complexity %d, which exceeds the limit of 0","extensions":{"code":"COMPLEXITY_LIMIT_EXCEEDED"}}]`, tt.complexity))
+			assert.EqualError(t, err, fmt.Sprintf(`[{"message":"operation has complexity %d, which exceeds the limit of -1","extensions":{"code":"COMPLEXITY_LIMIT_EXCEEDED"}}]`, tt.complexity))
 		})
 	}
 }
@@ -110,7 +134,7 @@ func TestComplexityDefault2(t *testing.T) {
 	}
 
 	srv := handler.NewDefaultServer(gql2.NewExecutableSchema(cfg))
-	srv.Use(extension.FixedComplexityLimit(0))
+	srv.Use(extension.FixedComplexityLimit(-1))
 
 	c := client.New(srv)
 
@@ -130,6 +154,18 @@ func TestComplexityDefault2(t *testing.T) {
 		{query: `query { foo(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 6},
 		{query: `query { foo(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 9},
 		{query: `query { foo(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 9},
+		{query: `query { bar(a: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 30},
+		{query: `query { bar(a: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 60},
+		{query: `query { bar(a: 5, b: 1) { edges { node { bar } }  } }`, complexity: 45},
+		{query: `query { bar(a: 10, b: 1) { edges { node { bar } } } }`, complexity: 90},
+		{query: `query { bar(b: 5) { pageInfo { hasNextPage } } }`, complexity: 30},
+		{query: `query { bar(b: 10) { pageInfo { hasNextPage } } }`, complexity: 60},
+		{query: `query { bar(b: 5) { edges { node { bar } }  } }`, complexity: 45},
+		{query: `query { bar(b: 10) { edges { node { bar } } } }`, complexity: 90},
+		{query: `query { bar(c: 5, b: 1) { pageInfo { hasNextPage } } }`, complexity: 6},
+		{query: `query { bar(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 6},
+		{query: `query { bar(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 9},
+		{query: `query { bar(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 9},
 	}
 
 	for i, tt := range tests {
@@ -138,7 +174,7 @@ func TestComplexityDefault2(t *testing.T) {
 			t.Parallel()
 
 			err := c.Post(tt.query, new(struct{}))
-			assert.EqualError(t, err, fmt.Sprintf(`[{"message":"operation has complexity %d, which exceeds the limit of 0","extensions":{"code":"COMPLEXITY_LIMIT_EXCEEDED"}}]`, tt.complexity))
+			assert.EqualError(t, err, fmt.Sprintf(`[{"message":"operation has complexity %d, which exceeds the limit of -1","extensions":{"code":"COMPLEXITY_LIMIT_EXCEEDED"}}]`, tt.complexity))
 		})
 	}
 }
