@@ -18,8 +18,8 @@ import (
 var tmpl string
 
 var (
-	ErrMulFieldIsNotInt   = errors.New("mul field is not Int")
-	ErrMulFieldIsNotExist = errors.New("mul field is not exist")
+	ErrMulFieldIsWrongType = errors.New("mul field is neither Int nor List")
+	ErrMulFieldIsNotExist  = errors.New("mul field is not exist")
 )
 
 var (
@@ -101,7 +101,7 @@ func (p *Plugin) GenerateCode(cfg *codegen.Data) error {
 					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its not exist: %w", name, ErrMulFieldIsNotExist)
 				}
 				if !IsInt(arg.Type) && !IsList(arg.Type) {
-					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its type is neither Int nor List: %w", name, ErrMulFieldIsNotInt)
+					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its type is neither Int nor List: %w", name, ErrMulFieldIsWrongType)
 				}
 			}
 		}
