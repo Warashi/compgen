@@ -21,8 +21,10 @@ var ComplexityFuncs ComplexityRoot = struct {
 		StartCursor     func(childComplexity int) int
 	}
 	Query struct {
-		Bar func(childComplexity int, a *int, b int, c *int) int
-		Foo func(childComplexity int, a *int, b int, c *int) int
+		Bar  func(childComplexity int, a *int, b int, c *int) int
+		Baz  func(childComplexity int, ids []string) int
+		Bazz func(childComplexity int, ids []string) int
+		Foo  func(childComplexity int, a *int, b int, c *int) int
 	}
 }{
 	Foo: struct {
@@ -114,8 +116,10 @@ var ComplexityFuncs ComplexityRoot = struct {
 		},
 	},
 	Query: struct {
-		Bar func(childComplexity int, a *int, b int, c *int) int
-		Foo func(childComplexity int, a *int, b int, c *int) int
+		Bar  func(childComplexity int, a *int, b int, c *int) int
+		Baz  func(childComplexity int, ids []string) int
+		Bazz func(childComplexity int, ids []string) int
+		Foo  func(childComplexity int, a *int, b int, c *int) int
 	}{
 
 		Bar: func(childComplexity int, a *int, b int, c *int) int {
@@ -128,6 +132,24 @@ var ComplexityFuncs ComplexityRoot = struct {
 			}
 
 			complexity *= b
+
+			return complexity
+		},
+		Baz: func(childComplexity int, ids []string) int {
+			var complexity int
+
+			complexity = childComplexity + 1
+
+			complexity *= len(ids)
+
+			return complexity
+		},
+		Bazz: func(childComplexity int, ids []string) int {
+			var complexity int
+
+			complexity = childComplexity + 1
+
+			complexity *= len(ids)
 
 			return complexity
 		},

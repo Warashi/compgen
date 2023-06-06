@@ -65,14 +65,18 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Bar func(childComplexity int, a *int, b int, c *int) int
-		Foo func(childComplexity int, a *int, b int, c *int) int
+		Bar  func(childComplexity int, a *int, b int, c *int) int
+		Baz  func(childComplexity int, ids []string) int
+		Bazz func(childComplexity int, ids []string) int
+		Foo  func(childComplexity int, a *int, b int, c *int) int
 	}
 }
 
 type QueryResolver interface {
 	Foo(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
 	Bar(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
+	Baz(ctx context.Context, ids []string) (*model.FooConnection, error)
+	Bazz(ctx context.Context, ids []string) (*model.FooConnection, error)
 }
 
 type executableSchema struct {
@@ -165,6 +169,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Bar(childComplexity, args["a"].(*int), args["b"].(int), args["c"].(*int)), true
 
+	case "Query.baz":
+		if e.complexity.Query.Baz == nil {
+			break
+		}
+
+		args, err := ec.field_Query_baz_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Baz(childComplexity, args["ids"].([]string)), true
+
+	case "Query.bazz":
+		if e.complexity.Query.Bazz == nil {
+			break
+		}
+
+		args, err := ec.field_Query_bazz_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Bazz(childComplexity, args["ids"].([]string)), true
+
 	case "Query.foo":
 		if e.complexity.Query.Foo == nil {
 			break
@@ -242,6 +270,12 @@ type Query {
       b: Int!,
       c: Int,
     ): FooConnection! @complexity(mul: ["a","b"])
+    baz(
+      ids: [String!]
+    ): FooConnection! @complexity(mul: ["ids"])
+    bazz(
+      ids: [String!]!
+    ): FooConnection! @complexity(mul: ["ids"])
 }
 
 type PageInfo {
@@ -317,6 +351,36 @@ func (ec *executionContext) field_Query_bar_args(ctx context.Context, rawArgs ma
 		}
 	}
 	args["c"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_baz_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []string
+	if tmp, ok := rawArgs["ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ids"))
+		arg0, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_bazz_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []string
+	if tmp, ok := rawArgs["ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ids"))
+		arg0, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ids"] = arg0
 	return args, nil
 }
 
@@ -917,6 +981,128 @@ func (ec *executionContext) fieldContext_Query_bar(ctx context.Context, field gr
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_bar_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_baz(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_baz(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Baz(rctx, fc.Args["ids"].([]string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.FooConnection)
+	fc.Result = res
+	return ec.marshalNFooConnection2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋcalculationᚋgql2ᚋmodelᚐFooConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_baz(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_FooConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_FooConnection_pageInfo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type FooConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_baz_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_bazz(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_bazz(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Bazz(rctx, fc.Args["ids"].([]string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.FooConnection)
+	fc.Result = res
+	return ec.marshalNFooConnection2ᚖgithubᚗcomᚋWarashiᚋcompgenᚋcomplexitytestᚋcalculationᚋgql2ᚋmodelᚐFooConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_bazz(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_FooConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_FooConnection_pageInfo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type FooConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_bazz_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -3039,6 +3225,52 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
+		case "baz":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_baz(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "bazz":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_bazz(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
 		case "__type":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -3511,6 +3743,38 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

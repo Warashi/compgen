@@ -15,5 +15,5 @@ func TestFail(t *testing.T) {
 	require.NoError(t, err)
 
 	err = api.Generate(cfg, api.AddPlugin(compgen.New()))
-	assert.ErrorIs(t, err, compgen.ErrMulFieldIsNotInt)
+	assert.ErrorIs(t, err, compgen.ErrMulFieldIsWrongType)
 }

@@ -58,6 +58,14 @@ func TestComplexityDefault0(t *testing.T) {
 		{query: `query { bar(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 0},
 		{query: `query { bar(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 3},
 		{query: `query { bar(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 3},
+    {query: `query { baz(ids: ["a"]) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { baz(ids: ["a","b"]) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { baz(ids: ["a"]) { edges { node { bar } }  } }`, complexity: 3},
+		{query: `query { baz(ids: ["a","b"]) { edges { node { bar } } } }`, complexity: 6},
+    {query: `query { bazz(ids: ["a"]) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { bazz(ids: ["a","b"]) { pageInfo { hasNextPage } } }`, complexity: 0},
+		{query: `query { bazz(ids: ["a"]) { edges { node { bar } }  } }`, complexity: 3},
+		{query: `query { bazz(ids: ["a","b"]) { edges { node { bar } } } }`, complexity: 6},
 	}
 
 	for i, tt := range tests {
@@ -112,6 +120,14 @@ func TestComplexityDefault1(t *testing.T) {
 		{query: `query { bar(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 3},
 		{query: `query { bar(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 6},
 		{query: `query { bar(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 6},
+    {query: `query { baz(ids: ["a"]) { pageInfo { hasNextPage } } }`, complexity: 3},
+		{query: `query { baz(ids: ["a","b"]) { pageInfo { hasNextPage } } }`, complexity: 6},
+		{query: `query { baz(ids: ["a"]) { edges { node { bar } }  } }`, complexity: 6},
+		{query: `query { baz(ids: ["a","b"]) { edges { node { bar } } } }`, complexity: 12},
+    {query: `query { bazz(ids: ["a"]) { pageInfo { hasNextPage } } }`, complexity: 3},
+		{query: `query { bazz(ids: ["a","b"]) { pageInfo { hasNextPage } } }`, complexity: 6},
+		{query: `query { bazz(ids: ["a"]) { edges { node { bar } }  } }`, complexity: 6},
+		{query: `query { bazz(ids: ["a","b"]) { edges { node { bar } } } }`, complexity: 12},
 	}
 
 	for i, tt := range tests {
@@ -166,6 +182,14 @@ func TestComplexityDefault2(t *testing.T) {
 		{query: `query { bar(c: 10, b: 1) { pageInfo { hasNextPage } } }`, complexity: 6},
 		{query: `query { bar(c: 5, b: 1) { edges { node { bar } }  } }`, complexity: 9},
 		{query: `query { bar(c: 10, b: 1) { edges { node { bar } } } }`, complexity: 9},
+    {query: `query { baz(ids: ["a"]) { pageInfo { hasNextPage } } }`, complexity: 6},
+		{query: `query { baz(ids: ["a","b"]) { pageInfo { hasNextPage } } }`, complexity: 12},
+		{query: `query { baz(ids: ["a"]) { edges { node { bar } }  } }`, complexity: 9},
+		{query: `query { baz(ids: ["a","b"]) { edges { node { bar } } } }`, complexity: 18},
+    {query: `query { bazz(ids: ["a"]) { pageInfo { hasNextPage } } }`, complexity: 6},
+		{query: `query { bazz(ids: ["a","b"]) { pageInfo { hasNextPage } } }`, complexity: 12},
+		{query: `query { bazz(ids: ["a"]) { edges { node { bar } }  } }`, complexity: 9},
+		{query: `query { bazz(ids: ["a","b"]) { edges { node { bar } } } }`, complexity: 18},
 	}
 
 	for i, tt := range tests {
