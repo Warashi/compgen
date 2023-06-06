@@ -45,6 +45,7 @@ type Query {
       before: String,
       last: Int,
     ): FooConnection! @complexity(x: 2, mul: ["first", "last"])
+    fooIds(ids: [String!]): [Foo!] @complexity(x: 5, mul: ["ids"])
 }
 
 type PageInfo {
@@ -68,19 +69,35 @@ type Foo {
   bar: String! @complexity(x: 3)
 }
 ```
-Execute the following query:
-```graphql
-query {
-  foo(first: 5) {
-    edges {
-      node {
-        bar
+
+1. Execute the following query:
+    ```graphql
+    query {
+      foo(first: 5) {
+        edges {
+          node {
+            bar
+          }
+        }
       }
     }
-  }
-}
-```
-The complexity will be calculated as (3 + default + default + 2) * 5.
+    ```
+    The complexity will be calculated as (3 + default + default + 2) * 5.
+
+2. Execute the follow query:
+    ```graphql
+    query {
+      fooIds(ids: ["a","b","c"]) {
+        edges {
+          node {
+            bar
+          }
+        }
+      }
+    }
+    ```
+    The complexity will be calculated as (3 + default + default + 5) * 3.
+
 
 # Additional tools
 A linter [relaycompmul](./linter/relaycompmul) is useful when using compgen with the [relay cursor connections specification](https://relay.dev/graphql/connections.htm).
