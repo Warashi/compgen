@@ -5,11 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"text/template"
 
 	"github.com/99designs/gqlgen/codegen"
 	"github.com/99designs/gqlgen/codegen/config"
 	"github.com/99designs/gqlgen/codegen/templates"
 	"github.com/99designs/gqlgen/plugin"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 //go:embed templates/compgen.gotpl
@@ -70,6 +72,14 @@ type Inputs struct {
 	GQLGenData *codegen.Data
 }
 
+func IsInt(typ *ast.Type) bool {
+	return typ.NamedType == "Int"
+}
+
+func IsList(typ *ast.Type) bool {
+	return typ.NamedType == ""
+}
+
 // GenerateCode implements plugin.CodeGenerator
 func (p *Plugin) GenerateCode(cfg *codegen.Data) error {
 	for _, object := range cfg.Objects {
@@ -90,16 +100,20 @@ func (p *Plugin) GenerateCode(cfg *codegen.Data) error {
 				if arg == nil {
 					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its not exist: %w", name, ErrMulFieldIsNotExist)
 				}
-				if arg.Type.Name() != "Int" {
-					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its type is not Int: %w", name, ErrMulFieldIsNotInt)
+				if !IsInt(arg.Type) && !IsList(arg.Type) {
+					return fmt.Errorf("argument `%s` is used by @complexity's mul argument, but its type is neither Int nor List: %w", name, ErrMulFieldIsNotInt)
 				}
 			}
 		}
 	}
 	return templates.Render(templates.Options{
-		PackageName:     cfg.Config.Exec.Package,
-		Template:        tmpl,
-		Filename:        filepath.Join(filepath.Dir(cfg.Config.Exec.Filename), p.Filename),
+		PackageName: cfg.Config.Exec.Package,
+		Template:    tmpl,
+		Filename:    filepath.Join(filepath.Dir(cfg.Config.Exec.Filename), p.Filename),
+		Funcs: template.FuncMap{
+			"IsInt":  IsInt,
+			"IsList": IsList,
+		},
 		GeneratedHeader: true,
 		Packages:        cfg.Config.Packages,
 		Data: Inputs{
