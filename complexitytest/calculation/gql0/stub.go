@@ -10,8 +10,10 @@ import (
 
 type Stub struct {
 	QueryResolver struct {
-		Foo func(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
-		Bar func(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
+		Foo  func(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
+		Bar  func(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error)
+		Baz  func(ctx context.Context, ids []string) (*model.FooConnection, error)
+		Bazz func(ctx context.Context, ids []string) (*model.FooConnection, error)
 	}
 }
 
@@ -26,4 +28,10 @@ func (r *stubQuery) Foo(ctx context.Context, a *int, b int, c *int) (*model.FooC
 }
 func (r *stubQuery) Bar(ctx context.Context, a *int, b int, c *int) (*model.FooConnection, error) {
 	return r.QueryResolver.Bar(ctx, a, b, c)
+}
+func (r *stubQuery) Baz(ctx context.Context, ids []string) (*model.FooConnection, error) {
+	return r.QueryResolver.Baz(ctx, ids)
+}
+func (r *stubQuery) Bazz(ctx context.Context, ids []string) (*model.FooConnection, error) {
+	return r.QueryResolver.Bazz(ctx, ids)
 }

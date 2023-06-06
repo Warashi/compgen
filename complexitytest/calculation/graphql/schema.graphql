@@ -11,6 +11,12 @@ type Query {
       b: Int!,
       c: Int,
     ): FooConnection! @complexity(mul: ["a","b"])
+    baz(
+      ids: [String!]
+    ): FooConnection! @complexity(mul: ["ids"])
+    bazz(
+      ids: [String!]!
+    ): FooConnection! @complexity(mul: ["ids"])
 }
 
 type PageInfo {
