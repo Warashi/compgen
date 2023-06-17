@@ -1,0 +1,18 @@
+name: Test
+on: 
+  - push
+  - pull_request
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+          check-latest: true
+      - name: Test compgen
+        run: go test ./...
+      - name: Test relaycompmul
+        working-directory: ./linter/relaycompmul
+        run: go test ./...
