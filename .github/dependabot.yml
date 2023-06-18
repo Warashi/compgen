@@ -4,3 +4,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+  - package-ecosystem: "gomod"
+    directory: "/linter/relaycompmul/"
+    schedule:
+      interval: "weekly"
