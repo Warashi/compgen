@@ -3,7 +3,7 @@ module github.com/Warashi/compgen
 go 1.22.5
 
 require (
-	github.com/99designs/gqlgen v0.17.51
+	github.com/99designs/gqlgen v0.17.54
 	github.com/stretchr/testify v1.9.0
 	github.com/vektah/gqlparser/v2 v2.5.16
 )
