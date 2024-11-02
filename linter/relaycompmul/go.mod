@@ -1,10 +1,10 @@
 module github.com/Warashi/compgen/linter/relaycompmul
 
-go 1.20
+go 1.21
 
 require (
 	github.com/gqlgo/gqlanalysis v0.3.5
-	github.com/vektah/gqlparser/v2 v2.5.17
+	github.com/vektah/gqlparser/v2 v2.5.18
 )
 
 require (
