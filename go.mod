@@ -5,7 +5,7 @@ go 1.22.5
 require (
 	github.com/99designs/gqlgen v0.17.61
 	github.com/stretchr/testify v1.10.0
-	github.com/vektah/gqlparser/v2 v2.5.20
+	github.com/vektah/gqlparser/v2 v2.5.21
 )
 
 require (
