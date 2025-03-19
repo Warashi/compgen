@@ -22,3 +22,6 @@ type PageInfo struct {
 	StartCursor     *string `json:"startCursor,omitempty"`
 	EndCursor       *string `json:"endCursor,omitempty"`
 }
+
+type Query struct {
+}
