@@ -7,7 +7,7 @@ toolchain go1.24.1
 require (
 	github.com/99designs/gqlgen v0.17.74
 	github.com/stretchr/testify v1.10.0
-	github.com/vektah/gqlparser/v2 v2.5.27
+	github.com/vektah/gqlparser/v2 v2.5.28
 )
 
 require (
