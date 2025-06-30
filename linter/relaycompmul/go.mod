@@ -4,7 +4,7 @@ go 1.23.4
 
 require (
 	github.com/gqlgo/gqlanalysis v0.3.6
-	github.com/vektah/gqlparser/v2 v2.5.28
+	github.com/vektah/gqlparser/v2 v2.5.30
 )
 
 require (
